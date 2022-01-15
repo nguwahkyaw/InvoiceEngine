@@ -3,7 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31624.102
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceUpload", "InvoiceUpload\InvoiceUpload.csproj", "{F80A5132-9446-4502-AD68-B8542FA85B21}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F80A5132-9446-4502-AD68-B8542FA85B21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F80A5132-9446-4502-AD68-B8542FA85B21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F80A5132-9446-4502-AD68-B8542FA85B21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F80A5132-9446-4502-AD68-B8542FA85B21}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
