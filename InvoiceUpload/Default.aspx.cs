@@ -30,9 +30,8 @@ namespace InvoiceUpload
 
                 if (!isValidFileType)
                 {
-                    //  file is Invalid  
-                    Response.Write("Unknown Format");
-                    return;
+                    //  file is InvalidInvalid  
+                    throw new Exception("Unknown Format");
                 }
 
                 //if file is valid
@@ -52,10 +51,19 @@ namespace InvoiceUpload
             catch (FormatException ex)
             {
                 Response.StatusCode = 400;
-                Response.Write($"{ex.Message} is not in the correct format.");
-                return;
+                Response.Write($"{ex.Message} is not in the correct format.");                
             }
 
+            catch (Exception ex)
+            {
+                Response.StatusCode = 400;
+                Response.Write(ex.Message);
+              
+            }
+            finally
+            {
+
+            }
         }
     }
 }

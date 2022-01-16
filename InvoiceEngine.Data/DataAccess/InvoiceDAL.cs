@@ -14,16 +14,20 @@ namespace InvoiceEngine.Data.DataAccess
         string consString = ConfigurationManager.ConnectionStrings["strConnection"].ConnectionString;
         public void InsertBulkInvoices(DataTable dataTable)
         {
-            using (SqlConnection con = new SqlConnection(consString))
+            using (SqlBulkCopy sqlBulkCopy = new SqlBulkCopy(consString))
             {
-                using (SqlBulkCopy sqlBulkCopy = new SqlBulkCopy(con))
-                {
-                    //Set the database table name.
-                    sqlBulkCopy.DestinationTableName = "dbo.Invoices";
-                    con.Open();
-                    sqlBulkCopy.WriteToServer(dataTable);
-                    con.Close();
-                }
+                sqlBulkCopy.ColumnMappings.Clear();
+
+                sqlBulkCopy.ColumnMappings.Add("TransactionID", "TransactionID");
+                sqlBulkCopy.ColumnMappings.Add("Amount", "Amount");
+                sqlBulkCopy.ColumnMappings.Add("Currency", "Currency");
+                sqlBulkCopy.ColumnMappings.Add("TransactionDate", "TransactionDate");
+                sqlBulkCopy.ColumnMappings.Add("Status", "Status");
+
+                //Set the database table name.
+                sqlBulkCopy.DestinationTableName = "dbo.Invoices";
+                
+                sqlBulkCopy.WriteToServer(dataTable);
             }
         }
 

@@ -34,10 +34,8 @@ namespace InvoiceEngine.Services.Services
                 transactionList = (TransactionListDto)serializer.Deserialize(fileStream);
             }
 
-
-
-            //string xml = File.ReadAllText(filePath);
-            //invoiceDAL.InsertBulkInvoices(xml);
+            DataTable dt = ConvertTransactionListToDatatable(transactionList);
+            invoiceDAL.InsertBulkInvoices(dt);
         }
 
         private DataTable ConvertCSVToDatatable(string csvString)
@@ -51,8 +49,16 @@ namespace InvoiceEngine.Services.Services
                 {
                     DataRow dr = dt.NewRow();
                     string[] fieldArr = row.Split(',');
+                                      
 
-                    dr["TransactionID"] = fieldArr[0];
+                    if (!string.IsNullOrEmpty(fieldArr[0]))
+                    {
+                        dr["TransactionID"] = fieldArr[0];
+                    }
+                    else
+                    {
+                        throw new FormatException($"Transaction ID [{fieldArr[0]}]");
+                    }
 
                     if (double.TryParse(fieldArr[1], out double amount))
                     {
@@ -94,6 +100,76 @@ namespace InvoiceEngine.Services.Services
                     {
                         throw new FormatException($"Status [{fieldArr[4]}]");
                     }
+
+                    dt.Rows.Add(dr);
+                }
+            }
+            return dt;
+        }
+
+        private DataTable ConvertTransactionListToDatatable(TransactionListDto transactionList)
+        {
+
+            DataTable dt = GetInvoiceTempDataTable();
+
+            foreach (TransactionDto transaction in transactionList.Transactions)
+            {
+                if (transaction != null)
+                {
+                    DataRow dr = dt.NewRow();
+
+                    if (!string.IsNullOrWhiteSpace(transaction.TransactionID))
+                    {
+                        dr["TransactionID"] = transaction.TransactionID;
+                    }
+                    else
+                    {
+                        throw new FormatException($"TransactionID [{transaction.TransactionID}]");
+                    }
+                   
+
+                    if (double.TryParse(transaction.PaymentDetails.Amount, out double amount))
+                    {
+                        dr["Amount"] = amount;
+                    }
+                    else
+                    {
+                        throw new FormatException($"Amount [{transaction.PaymentDetails.Amount}]");
+                    }
+
+                    if (ISO._4217.CurrencyCodesResolver.Codes.Any(c => c.Code == transaction.PaymentDetails.CurrencyCode))
+                    {
+                        dr["Currency"] = transaction.PaymentDetails.CurrencyCode;
+                    }
+                    else
+                    {
+                        throw new FormatException($"Currency Code [{transaction.PaymentDetails.CurrencyCode}]");
+                    }
+
+                    if (DateTime.TryParseExact(
+                        transaction.TransactionDate,
+                        Constants.XMLDateFormat,
+                        provider,
+                        DateTimeStyles.None,
+                        out DateTime transactionDate))
+                    {
+                        dr["TransactionDate"] = transactionDate;
+                    }
+                    else
+                    {
+                        throw new FormatException($"Transaction Date [{transaction.TransactionDate}]");
+                    }
+
+                    if (Enum.IsDefined(typeof(XMLInvoiceStatus), transaction.Status))
+                    {
+                        dr["Status"] = transaction.Status;
+                    }
+                    else
+                    {
+                        throw new FormatException($"Status [{transaction.Status}]");
+                    }
+
+                    dt.Rows.Add(dr);
                 }
             }
             return dt;

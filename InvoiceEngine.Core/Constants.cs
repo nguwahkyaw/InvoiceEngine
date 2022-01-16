@@ -9,5 +9,7 @@
         public static readonly string[] AllowedFileTypes = { ".csv", ".xml" };
 
         public const string CSVDateFormat = "dd/MM/yyyy hh:mm:ss";
+
+        public const string XMLDateFormat = "yyyy-MM-ddTHH:mm:ss";
     }
 }
