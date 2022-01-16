@@ -31,7 +31,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ISO.4217, Version=1.0.10.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ISO.4217.CurrencyCodes.1.0.10\lib\netstandard2.0\ISO.4217.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -42,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\FileUploadService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InvoiceEngine.Core\InvoiceEngine.Core.csproj">
@@ -52,6 +57,9 @@
       <Project>{fbac593d-71f9-4732-8cc7-3f43b9d97d15}</Project>
       <Name>InvoiceEngine.Data</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

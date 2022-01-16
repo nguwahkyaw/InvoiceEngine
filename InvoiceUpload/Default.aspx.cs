@@ -1,105 +1,61 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
+﻿using InvoiceEngine.Core.Constants;
+using InvoiceEngine.Services.Services;
+using System;
 using System.IO;
-using System.Data;
-using System.Data.SqlClient;
-using System.Configuration;
+using System.Linq;
+using System.Web.UI;
 
 namespace InvoiceUpload
 {
     public partial class _Default : Page
     {
+        FileUploadService fileUploadService = new FileUploadService();
+
         protected void Page_Load(object sender, EventArgs e)
         {
 
         }
+
         protected void Upload(object sender, EventArgs e)
         {
-            //Upload and save the file.
-            string filename = Path.GetFileName(FileUpload1.PostedFile.FileName);
-            string extension = Path.GetExtension(filename);
-            string filePath = Server.MapPath("~/UploadFiles/") + filename; ;
-            FileUpload1.SaveAs(filePath);
-                      
-            if (extension == ".csv")
+            try
             {
-                UploadCSV(filePath);
+                //Upload and save the file.
+                string filename = Path.GetFileName(FileUpload1.PostedFile.FileName);
+                string extension = Path.GetExtension(filename);
+                string filePath = Server.MapPath(Constants.DefaultUploadFilePath) + filename; ;
+                FileUpload1.SaveAs(filePath);
+
+                bool isValidFileType = Constants.AllowedFileTypes.Contains(extension);
+
+                if (!isValidFileType)
+                {
+                    //  file is Invalid  
+                    Response.Write("Unknown Format");
+                    return;
+                }
+
+                //if file is valid
+                if (extension == ".csv")
+                {
+                    fileUploadService.UploadCSV(filePath);
+                }
+                else if (extension == ".xml")
+                {
+                    fileUploadService.UploadXML(filePath);
+                }
+
+                Response.StatusCode = 200;
+                Response.Write("Successfully Uploaded");
+
             }
-            else if (extension == ".xml")
+            catch (FormatException ex)
             {
-                UploadXML(filePath);
-            }
-            else
-            {
-                //  file is Invalid  
-                Response.Write("Unknown Format");
+                Response.StatusCode = 400;
+                Response.Write($"{ex.Message} is not in the correct format.");
                 return;
             }
 
-        }
-
-        protected void UploadCSV(string filePath)
-        {
-            DataTable dt = new DataTable();
-            dt.Columns.AddRange(new DataColumn[5]
-                { new DataColumn("TransactionID", typeof(string)),
-                new DataColumn("Amount", typeof(decimal)),
-                new DataColumn("Currency",typeof(string)),
-                new DataColumn("TransactionDate",typeof(DateTime)),
-                new DataColumn("Status",typeof(string))
-                }
-                );
-
-
-            string csvData = File.ReadAllText(filePath);
-            foreach (string row in csvData.Split('\n'))
-            {
-                if (!string.IsNullOrEmpty(row))
-                {
-                    dt.Rows.Add();
-                    int i = 0;
-                    foreach (string cell in row.Split(','))
-                    {
-                        dt.Rows[dt.Rows.Count - 1][i] = cell;
-                        i++;
-                    }
-                }
-            }
-
-            string consString = ConfigurationManager.ConnectionStrings["strConnection"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(consString))
-            {
-                using (SqlBulkCopy sqlBulkCopy = new SqlBulkCopy(con))
-                {
-                    //Set the database table name.
-                    sqlBulkCopy.DestinationTableName = "dbo.Invoice";
-                    con.Open();
-                    sqlBulkCopy.WriteToServer(dt);
-                    con.Close();
-                }
-            }
-        }
-
-        protected void UploadXML(string filePath)
-        {
-            string xml = File.ReadAllText(filePath);
-            string constr = ConfigurationManager.ConnectionStrings["strConnection"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(constr))
-            {
-                using (SqlCommand cmd = new SqlCommand("InsertInvoice_xml"))
-                {
-                    cmd.Connection = con;
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@xml", xml);
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                }
-            }
         }
     }
 }
