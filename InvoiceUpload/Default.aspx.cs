@@ -36,7 +36,7 @@ namespace InvoiceUpload
             else
             {
                 //  file is Invalid  
-                Response.Write("This is Invalid Extension File");
+                Response.Write("Unknown Format");
                 return;
             }
 

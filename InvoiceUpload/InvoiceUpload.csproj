@@ -224,6 +224,16 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InvoiceEngine.Core\InvoiceEngine.Core.csproj">
+      <Project>{9d72a19f-2f67-4c7f-a16f-7d9b8ce66b1f}</Project>
+      <Name>InvoiceEngine.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\InvoiceEngine.Services\InvoiceEngine.Services.csproj">
+      <Project>{3e2f69dd-ea0e-4352-8763-5b67a0b53403}</Project>
+      <Name>InvoiceEngine.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
