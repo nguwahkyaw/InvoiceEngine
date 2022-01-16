@@ -33,6 +33,15 @@ namespace InvoiceUpload
         protected global::System.Web.UI.WebControls.Label lbl_allow_format;
 
         /// <summary>
+        /// customValidatorUpload control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CustomValidator customValidatorUpload;
+
+        /// <summary>
         /// button_fileUpload control.
         /// </summary>
         /// <remarks>
