@@ -20,11 +20,32 @@ namespace InvoiceUpload
         protected void Upload(object sender, EventArgs e)
         {
             //Upload and save the file.
-            string csvPath = Server.MapPath("~/Files/") + Path.GetFileName(FileUpload1.PostedFile.FileName);
-            FileUpload1.SaveAs(csvPath);
+            string filename = Path.GetFileName(FileUpload1.PostedFile.FileName);
+            string extension = Path.GetExtension(filename);
+            string filePath = Server.MapPath("~/UploadFiles/") + filename; ;
+            FileUpload1.SaveAs(filePath);
+                      
+            if (extension == ".csv")
+            {
+                UploadCSV(filePath);
+            }
+            else if (extension == ".xml")
+            {
+                UploadXML(filePath);
+            }
+            else
+            {
+                //  file is Invalid  
+                Response.Write("This is Invalid Extension File");
+                return;
+            }
 
+        }
+
+        protected void UploadCSV(string filePath)
+        {
             DataTable dt = new DataTable();
-            dt.Columns.AddRange(new DataColumn[5] 
+            dt.Columns.AddRange(new DataColumn[5]
                 { new DataColumn("TransactionID", typeof(string)),
                 new DataColumn("Amount", typeof(decimal)),
                 new DataColumn("Currency",typeof(string)),
@@ -34,7 +55,7 @@ namespace InvoiceUpload
                 );
 
 
-            string csvData = File.ReadAllText(csvPath);
+            string csvData = File.ReadAllText(filePath);
             foreach (string row in csvData.Split('\n'))
             {
                 if (!string.IsNullOrEmpty(row))
@@ -58,6 +79,24 @@ namespace InvoiceUpload
                     sqlBulkCopy.DestinationTableName = "dbo.Invoice";
                     con.Open();
                     sqlBulkCopy.WriteToServer(dt);
+                    con.Close();
+                }
+            }
+        }
+
+        protected void UploadXML(string filePath)
+        {
+            string xml = File.ReadAllText(filePath);
+            string constr = ConfigurationManager.ConnectionStrings["strConnection"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(constr))
+            {
+                using (SqlCommand cmd = new SqlCommand("InsertInvoice_xml"))
+                {
+                    cmd.Connection = con;
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@xml", xml);
+                    con.Open();
+                    cmd.ExecuteNonQuery();
                     con.Close();
                 }
             }
