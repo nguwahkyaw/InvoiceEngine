@@ -1,9 +1,8 @@
 ﻿using InvoiceEngine.Core;
 using InvoiceEngine.Core.Constants;
-using InvoiceEngine.Core.DTO;
+using InvoiceEngine.Core.XTO;
 using InvoiceEngine.Data.DataAccess;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.IO;
@@ -27,11 +26,11 @@ namespace InvoiceEngine.Services.Services
 
         public void UploadXML(string filePath)
         {
-            var transactionList = new TransactionListDto();
-            XmlSerializer serializer = new XmlSerializer(typeof(TransactionListDto));
+            var transactionList = new TransactionListXto();
+            XmlSerializer serializer = new XmlSerializer(typeof(TransactionListXto));
             using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
             {
-                transactionList = (TransactionListDto)serializer.Deserialize(fileStream);
+                transactionList = (TransactionListXto)serializer.Deserialize(fileStream);
             }
 
             DataTable dt = ConvertTransactionListToDatatable(transactionList);
@@ -107,12 +106,12 @@ namespace InvoiceEngine.Services.Services
             return dt;
         }
 
-        private DataTable ConvertTransactionListToDatatable(TransactionListDto transactionList)
+        private DataTable ConvertTransactionListToDatatable(TransactionListXto transactionList)
         {
 
             DataTable dt = GetInvoiceTempDataTable();
 
-            foreach (TransactionDto transaction in transactionList.Transactions)
+            foreach (TransactionXto transaction in transactionList.Transactions)
             {
                 if (transaction != null)
                 {

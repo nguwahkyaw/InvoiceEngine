@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace InvoiceEngine.Core.DTO
+namespace InvoiceEngine.Core.XTO
 {
     [XmlRoot("Transactions")]
-    public class TransactionListDto
+    public class TransactionListXto
     {
         [XmlElement("Transaction")]
-        public List<TransactionDto> Transactions { get; set; }
+        public List<TransactionXto> Transactions { get; set; }
     }
 }

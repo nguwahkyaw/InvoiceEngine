@@ -1,8 +1,8 @@
 ﻿using System.Xml.Serialization;
 
-namespace InvoiceEngine.Core.DTO
+namespace InvoiceEngine.Core.XTO
 {    
-    public class PaymentDetailDto
+    public class PaymentDetailXto
     {
         [XmlElement("Amount")]
         public string Amount { get; set; }

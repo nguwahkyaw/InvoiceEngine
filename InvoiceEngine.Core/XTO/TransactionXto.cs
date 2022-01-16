@@ -1,8 +1,8 @@
 ﻿using System.Xml.Serialization;
 
-namespace InvoiceEngine.Core.DTO
+namespace InvoiceEngine.Core.XTO
 {
-    public class TransactionDto
+    public class TransactionXto
     {
         [XmlAttribute("id")]
         public string TransactionID { get; set; }
@@ -11,7 +11,7 @@ namespace InvoiceEngine.Core.DTO
         public string TransactionDate { get; set; }
 
         [XmlElement("PaymentDetails")]
-        public PaymentDetailDto PaymentDetails { get; set; }
+        public PaymentDetailXto PaymentDetails { get; set; }
 
         [XmlElement("Status")]
         public string Status { get; set; }
