@@ -42,6 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="DTO\TransactionListDto.cs" />
+    <Compile Include="DTO\PaymentDetailDto.cs" />
+    <Compile Include="DTO\TransactionDto.cs" />
     <Compile Include="InvoiceStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

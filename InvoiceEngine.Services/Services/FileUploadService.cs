@@ -1,5 +1,6 @@
 ﻿using InvoiceEngine.Core;
 using InvoiceEngine.Core.Constants;
+using InvoiceEngine.Core.DTO;
 using InvoiceEngine.Data.DataAccess;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace InvoiceEngine.Services.Services
 {
@@ -25,8 +27,17 @@ namespace InvoiceEngine.Services.Services
 
         public void UploadXML(string filePath)
         {
-            string xml = File.ReadAllText(filePath);
-            invoiceDAL.InsertBulkInvoices(xml);
+            var transactionList = new TransactionListDto();
+            XmlSerializer serializer = new XmlSerializer(typeof(TransactionListDto));
+            using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
+            {
+                transactionList = (TransactionListDto)serializer.Deserialize(fileStream);
+            }
+
+
+
+            //string xml = File.ReadAllText(filePath);
+            //invoiceDAL.InsertBulkInvoices(xml);
         }
 
         private DataTable ConvertCSVToDatatable(string csvString)
