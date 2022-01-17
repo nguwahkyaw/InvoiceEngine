@@ -11,6 +11,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceEngine.Core", "Invoi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InvoiceEngine.Data", "InvoiceEngine.Data\InvoiceEngine.Data.csproj", "{FBAC593D-71F9-4732-8CC7-3F43B9D97D15}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CEF0EF0C-03E0-4937-AC47-C13615344C14}"
+	ProjectSection(SolutionItems) = preProject
+		DBQuery\InvoiceEngine_20220117.sql = DBQuery\InvoiceEngine_20220117.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
